@@ -41,7 +41,7 @@ func (repositorio usuarios) Buscar(nomeOuNick string) ([]modelos.Usuario, error)
 	nomeOuNick = fmt.Sprintf("%%%s%%", nomeOuNick) //%nomeOuNick%
 
 	linhas, erro := repositorio.db.Query(
-		"select id, nome, nick, criadoEm from usuarios where nome LIKE ? or nick LIKE ?",
+		"select id, nome, email, nick, criadoEm from usuarios where nome LIKE ? or nick LIKE ?",
 		nomeOuNick, nomeOuNick)
 	if erro != nil {
 		return nil, erro
@@ -56,6 +56,7 @@ func (repositorio usuarios) Buscar(nomeOuNick string) ([]modelos.Usuario, error)
 		if erro = linhas.Scan(
 			&usuario.ID,
 			&usuario.Nome,
+			&usuario.Email,
 			&usuario.Nick,
 			&usuario.CriadoEm,
 		); erro != nil {
@@ -121,4 +122,22 @@ func (repositorio *usuarios) Deletar(ID uint64) error {
 	}
 
 	return nil
+}
+
+// BuscarPeloEmail busca um usuário por email e retorna seu id e senha com hash
+func (repositorio *usuarios) BuscarPorEmail(email string) (modelos.Usuario, error) {
+	linha, erro := repositorio.db.Query("select id, senha from usuarios where email = ?", email)
+	if erro != nil {
+		return modelos.Usuario{}, erro
+	}
+	defer linha.Close()
+
+	var usuario modelos.Usuario
+	if linha.Next() {
+		if erro = linha.Scan(&usuario.ID, &usuario.Senha); erro != nil {
+			return modelos.Usuario{}, erro
+		}
+	}
+
+	return usuario, nil
 }
