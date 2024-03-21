@@ -19,13 +19,13 @@ var rotasUsuarios = []Rota{
 		RequerAutenticacao: false,
 	},
 	{
-		URI:                "/usuarios/{usuarioId}",
+		URI:                "/usuarios/{id}",
 		Metodo:             http.MethodGet,
 		Funcao:             controllers.BuscarUsuario,
 		RequerAutenticacao: false,
 	},
 	{
-		URI:                "/usuarios/{usuarioId}",
+		URI:                "/usuarios/{id}",
 		Metodo:             http.MethodPut,
 		Funcao:             controllers.AtualizarUsuario,
 		RequerAutenticacao: false,
