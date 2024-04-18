@@ -24,7 +24,6 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 	if erro != nil {
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 	}
-
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
